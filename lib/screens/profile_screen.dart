@@ -24,92 +24,149 @@ class _ProfileScreenState extends State<ProfileScreen> {
       setState(() {
         _pickedImage = File(pickedImageFile.path);
       });
-
+      final ref = FirebaseStorage.instance
+          .ref()
+          .child('userImage')
+          .child(auth.currentUser.uid + "jpg");
+      await ref.putFile(_pickedImage);
+      var url = await ref.getDownloadURL();
+      await FirebaseFirestore.instance
+          .collection('user')
+          .doc(auth.currentUser.uid)
+          .update({'imageUrl': url});
     } else {
       print('no Image selected');
     }
   }
 
   String userImage;
-  void getUserImage() async{
+  void getUserImage() async {
     FirebaseFirestore.instance
         .collection('user')
         .get()
         .then((QuerySnapshot querySnapshot) => {
-      querySnapshot.docs.forEach((doc) {
-        userImage = doc["imageUrl"];
-      })
-    });
+              querySnapshot.docs.forEach((doc) {
+                userImage = doc["imageUrl"];
+              })
+            });
   }
 
   @override
   Widget build(BuildContext context) {
-    getUserImage();
     return Scaffold(
-      backgroundColor: Theme.of(context).accentColor,
+      backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
-        title: Text('Profile'),
+        elevation: 0,
+        title: Text('Profile',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25)),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SizedBox(
-            height: 40,
-          ),
-          Center(
-            child: Stack(children: [
-              CircleAvatar(
-                radius: 80,
-                backgroundColor: Colors.grey,
-                backgroundImage:  _pickedImage != null ? FileImage(_pickedImage) : AssetImage('assets/images/user.png')
-                      ),
-              Positioned(
-                right: 0,
-                bottom: 0,
-                child: Container(
-                    margin: EdgeInsets.only(right: 10),
-                    width: 50,
-                    height: 50,
-                    child: new RawMaterialButton(
-                      fillColor: Theme.of(context).buttonColor,
-                      shape: new CircleBorder(),
-                      elevation: 0.0,
-                      child: Icon(
-                        Icons.camera_alt_rounded,
-                        color: Colors.white,
-                      ),
-                      onPressed: () {
-                        displayBottomSheet(context);
-                      },
-                    )),
-              )
-            ]),
-          ),
-          SizedBox(height: 25),
-          Text(
-            'Mahmoud Ibrahim',
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: 25,
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: 40,
             ),
-          ),
-          SizedBox(height:MediaQuery.of(context).size.height*0.5),
-          RaisedButton(
-              child: Text('Save',style: TextStyle(color: Colors.white),),
-              onPressed: () async {
-                final ref = FirebaseStorage.instance
-                    .ref()
-                    .child('userImage')
-                    .child(auth.currentUser.uid + "jpg");
-                await ref.putFile(_pickedImage);
-                var url = await ref.getDownloadURL();
-                await FirebaseFirestore.instance
-                    .collection('user')
-                    .doc(auth.currentUser.uid)
-                    .update({'imageUrl': url});
-              })
-        ],
+            Center(
+              child: Stack(children: [
+                CircleAvatar(
+                    radius: 80,
+                    backgroundColor: Colors.grey,
+                    backgroundImage: _pickedImage != null
+                        ? FileImage(_pickedImage)
+                        : AssetImage('assets/images/user.png')),
+                Positioned(
+                  right: 0,
+                  bottom: 0,
+                  child: Container(
+                      margin: EdgeInsets.only(right: 10),
+                      width: 50,
+                      height: 50,
+                      child: new RawMaterialButton(
+                        fillColor: Theme.of(context).buttonColor,
+                        shape: new CircleBorder(),
+                        elevation: 0.0,
+                        child: Icon(
+                          Icons.camera_alt_rounded,
+                          color: Colors.white,
+                        ),
+                        onPressed: () {
+                          displayBottomSheet(context);
+                        },
+                      )),
+                )
+              ]),
+            ),
+            SizedBox(height: 25),
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.person,
+                    color: Theme.of(context).buttonColor,
+                    size: 30,
+                  ),
+                  SizedBox(
+                    width: 25,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Name',
+                        style: TextStyle(color: Colors.white54),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        'Mahmoud Ibrahim',
+                        style: TextStyle(color: Colors.white, fontSize: 16),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            Divider(
+              color: Colors.white24,
+              indent: 15,
+              endIndent: 15,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.email,
+                    color: Theme.of(context).buttonColor,
+                    size: 25,
+                  ),
+                  SizedBox(
+                    width: 25,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Email',
+                        style: TextStyle(color: Colors.white54),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        'mkk28112000@gmail.com',
+                        style: TextStyle(color: Colors.white, fontSize: 16),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -150,18 +150,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 '       My Chat',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
               ),
-              // actions: [
-              //   IconButton(
-              //       icon: Icon(Icons.group_rounded),
-              //       onPressed: () {
-              //         Navigator.push(
-              //             context,
-              //             MaterialPageRoute(
-              //                 builder: (ctx) => ChatScreen(
-              //                       receiverId: "all",
-              //                     )));
-              //       }),
-              // ],
             ),
             body: SingleChildScrollView(
               child: Column(
@@ -249,8 +237,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                             fontSize: 18),
                                       ),
                                       leading: CircleAvatar(
-                                        backgroundImage: NetworkImage(
-                                            docs[index]['imageUrl']),
+                                        backgroundImage:
+                                            docs[index]['imageUrl'] == null
+                                                ? AssetImage(
+                                                    'assets/images/user.png')
+                                                : NetworkImage(
+                                                    docs[index]['imageUrl']),
                                       ),
                                       subtitle: Text(
                                         docs[index]['email'],

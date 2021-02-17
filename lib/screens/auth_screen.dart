@@ -55,7 +55,7 @@ class _SplashScreenState extends State<SplashScreen> {
         loginColor = Colors.white;
         break;
       case 1:
-        _backgroundColor =Theme.of(context).primaryColor;
+        _backgroundColor = Theme.of(context).primaryColor;
         _headingColor = Colors.white;
         _loginOffsit = 270;
         _registerOffsit = windowHight;
@@ -70,7 +70,7 @@ class _SplashScreenState extends State<SplashScreen> {
         _registerOffsit = 270;
         _loginXoffsit = 20;
         _loginWidth = windowWidth - 40;
-        loginColor =Color(0x7048495E);
+        loginColor = Color(0x7048495E);
 
         break;
     }
@@ -181,14 +181,14 @@ class _SplashScreenState extends State<SplashScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
-
                       Column(
                         children: <Widget>[
                           Container(
                             margin: EdgeInsets.only(bottom: 20),
                             child: Text(
                               "Login To Continue",
-                              style: TextStyle(fontSize: 20,color: Colors.white),
+                              style:
+                                  TextStyle(fontSize: 20, color: Colors.white),
                             ),
                           ),
                           SizedBox(
@@ -226,38 +226,37 @@ class _SplashScreenState extends State<SplashScreen> {
                               })
                         ],
                       ),
-
                       SizedBox(
                         height: 55,
                       ),
-                      if(_isLoading)
+                      if (_isLoading)
                         CircularProgressIndicator(
                           backgroundColor: Colors.white,
                         ),
-                      if(!_isLoading)
-                      Column(
-                        children: <Widget>[
-                          PrimaryButton(
-                            btnText: "Login",
-                            onTap: () {
-                              _submit();
-                            },
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                _pageState = 2;
-                              });
-                            },
-                            child: OutlineBtn(
-                              btnText: "Create New Account",
+                      if (!_isLoading)
+                        Column(
+                          children: <Widget>[
+                            PrimaryButton(
+                              btnText: "Login",
+                              onTap: () {
+                                _submit();
+                              },
                             ),
-                          )
-                        ],
-                      ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _pageState = 2;
+                                });
+                              },
+                              child: OutlineBtn(
+                                btnText: "Create New Account",
+                              ),
+                            )
+                          ],
+                        ),
                     ],
                   ),
                 ),
@@ -292,14 +291,15 @@ class _SplashScreenState extends State<SplashScreen> {
                             margin: EdgeInsets.only(bottom: 20),
                             child: Text(
                               "Create New Account",
-                              style: TextStyle(fontSize: 20,color: Colors.white),
+                              style:
+                                  TextStyle(fontSize: 20, color: Colors.white),
                             ),
                           ),
                           SizedBox(
                             height: 5,
                           ),
                           InputWithIcon(
-                            keyboardType: TextInputType.emailAddress,
+                              keyboardType: TextInputType.emailAddress,
                               icon: Icons.email,
                               hint: "Enter Your Email",
                               onSaved: (value) {
@@ -350,34 +350,34 @@ class _SplashScreenState extends State<SplashScreen> {
                       SizedBox(
                         height: 23,
                       ),
-                      if(!_isLoading)
-                      Column(
-                        children: <Widget>[
-                          PrimaryButton(
-                            btnText: "Signup",
-                            onTap: () {
-                              _submit();
-                            },
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                _pageState = 2;
-                              });
-                            },
-                            child: OutlineBtn(
-                              btnText: "Login",
+                      if (!_isLoading)
+                        Column(
+                          children: <Widget>[
+                            PrimaryButton(
+                              btnText: "Signup",
+                              onTap: () {
+                                _submit();
+                              },
                             ),
-                          ),
-                          SizedBox(
-                            height: 50,
-                          )
-                        ],
-                      ),
-                      if(_isLoading)
+                            SizedBox(
+                              height: 10,
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _pageState = 2;
+                                });
+                              },
+                              child: OutlineBtn(
+                                btnText: "Login",
+                              ),
+                            ),
+                            SizedBox(
+                              height: 50,
+                            )
+                          ],
+                        ),
+                      if (_isLoading)
                         CircularProgressIndicator(
                           backgroundColor: Colors.white,
                         )
@@ -396,7 +396,6 @@ class _SplashScreenState extends State<SplashScreen> {
     final isValid1 = _registerFormKey.currentState.validate();
     final isValid2 = _loginFormKey.currentState.validate();
     FocusScope.of(context).unfocus();
-    // يعمل إغلاق للكيبورد عشان م يضل طالع للليوزر
     if (isValid1) {
       _registerFormKey.currentState.save();
       _submitAuthForm(signupEmail.trim(), signUpUserName.trim(), signupPassword,
@@ -418,18 +417,17 @@ class _SplashScreenState extends State<SplashScreen> {
       if (pageState == 1) {
         authResault = await _auth.signInWithEmailAndPassword(
             email: email, password: password);
-
       } else if (pageState == 2) {
         authResault = await _auth.createUserWithEmailAndPassword(
             email: email, password: password);
-        await  FirebaseFirestore.instance
+        await FirebaseFirestore.instance
             .collection('user')
             .doc(authResault.user.uid)
             .set({
-          'username':userName,
-          'email':email,
+          'username': userName,
+          'email': email,
           'uid': auth.currentUser.uid,
-          'imageUrl' :null
+          'imageUrl': null
         });
       }
     } on FirebaseAuthException catch (e) {

@@ -16,22 +16,7 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  final ScrollController _scrollController = ScrollController();
-
-  // void getUserImage() async {
-  //   FirebaseFirestore.instance
-  //       .collection('user')
-  //       .get()
-  //       .then((QuerySnapshot querySnapshot) => {
-  //             querySnapshot.docs.forEach((doc) {
-  //               if (doc["uid"] == FirebaseAuth.instance.currentUser.uid)
-  //
-  //             })
-  //           });
-  // }
-
   Widget build(BuildContext context) {
-    // getUserImage();
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
@@ -40,7 +25,10 @@ class _ChatScreenState extends State<ChatScreen> {
         leading: Padding(
           padding: const EdgeInsets.only(left: 20.0),
           child: CircleAvatar(
-              radius: 20.0, backgroundImage: NetworkImage(widget.userImage)),
+              radius: 20.0,
+              backgroundImage: widget.userImage == null
+                  ? AssetImage('assets/images/user.png')
+                  : NetworkImage(widget.userImage)),
         ),
         title: Text(widget.userName),
         actions: [
