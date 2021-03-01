@@ -125,7 +125,7 @@ class Messages extends StatelessWidget {
                       );
                     } else {
                       return Padding(
-                        padding: const EdgeInsets.only(top: 20.0),
+                        padding: const EdgeInsets.symmetric(vertical: 10),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -162,8 +162,15 @@ class Messages extends StatelessWidget {
                                             style:
                                                 TextStyle(color: Colors.white),
                                           )
-                                        : Image.network(
-                                            docs[index]['messageImageUrl']),
+                                        : CachedNetworkImage(
+                                            imageUrl: docs[index]
+                                                ['messageImageUrl'],
+                                            placeholder: (context, url) =>
+                                                CircularProgressIndicator(),
+                                            errorWidget:
+                                                (context, url, error) =>
+                                                    Icon(Icons.error),
+                                          ),
                                     SizedBox(
                                       height: 3,
                                     ),
@@ -183,9 +190,7 @@ class Messages extends StatelessWidget {
                   } else {
                     return null;
                   }
-                }
-                //Text(docs[index]['text']),
-                );
+                });
           }
         });
   }
